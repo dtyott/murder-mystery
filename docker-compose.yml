@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+
+#################################
+#   Setup fastapi container
+#################################
+  server:
+    build: ./backend
+    expose:
+      - ${APP_SERVER_PORT}
+    environment:
+      #API_HOST: ${API_HOST}
+      APP_SERVER_PORT: ${APP_SERVER_PORT}
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/murder_mystery_db
+    ports:
+      - ${APP_SERVER_PORT}:${APP_SERVER_PORT}
+    volumes:
+      - ./backend/app:/code/app
+    command: "uvicorn app.main:app --host 0.0.0.0 --port ${APP_SERVER_PORT}"    
+    depends_on:
+      - db
+
+#################################
+#   Setup react container
+#################################
+  client:
+    build: ./frontend
+    environment:
+      - REACT_APP_PORT=${REACT_APP_PORT}
+    expose:
+      - PORT=${REACT_APP_PORT}  
+    ports:
+      - ${REACT_APP_PORT}:${REACT_APP_PORT}
+    volumes:
+      - ./frontend/src:/code/src
+      - ./frontend/public:/core/public
+    links:
+    - server
+    command: "npm run start"
+  
+#################################
+#   Setup db container
+#################################
+  db:
+    image: postgres:13-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=murder_mystery_db
+volumes:
+  postgres_data:

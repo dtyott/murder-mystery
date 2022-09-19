@@ -1,0 +1,1 @@
+STORY_LENGTH = 25
