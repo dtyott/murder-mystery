@@ -11,7 +11,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { PostMessage } from "../api/PostOffice";
+import { PostData } from "../api/PostOffice";
 import {StoreContext} from "../storage/Store";
 
 
@@ -33,18 +33,20 @@ export default function JoinGame() {
         name: nameText,
         role: roleText
       }
-        const data = PostMessage(POTENTIAL_CHARACTER_ENDPOINT, input_character)
+        const data = PostData(POTENTIAL_CHARACTER_ENDPOINT, input_character, setCharacterText)
+        console.log(data)
         setCharacterText(data.backstories)
     }
 
     function handleCreate(){
+
         const character = {
             'name': nameText,
             'role': roleText,
-            'backstory': characterText[selectedCharacter],
+            'backstory': characterText.backstories? characterText.backstories[selectedCharacter]:"",
             'game_id': gameId.game_id
         };
-        const data = PostMessage(CHARACTER_ENDPOINT, character)
+        const data = PostData(CHARACTER_ENDPOINT, character)
         postprocessCreate(data)
     }
 
@@ -99,7 +101,7 @@ export default function JoinGame() {
         <CasinoIcon
         onClick = {(_)=>handleClick()}
         />
-        {characterText.map((text,i)=>{
+        {(characterText.backstories || []).map((text,i)=>{
             const selected = selectedCharacter==i
             return <Card key={i} sx={{ minWidth: 275, maxWidth:300 }} style={{backgroundColor: selected?"LightCyan":"Ivory"}} >
             <CardContent>

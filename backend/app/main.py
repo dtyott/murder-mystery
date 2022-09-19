@@ -47,7 +47,7 @@ def read_root( request: Request):
     return {"url": str(request.url.path)}
 
 @app.post("/api/potential_character", response_model=PotentialCharacter)
-async def get_potential_character(input_character: CharacterBase, choices: int, request: Request):
+async def get_potential_character(input_character: CharacterBase, choices: int = 5):
     backstories = [story.make_story_for_character(input_character, config.STORY_LENGTH) for _ in range(choices)]
     return PotentialCharacter(**input_character.dict(), backstories=backstories)
 
