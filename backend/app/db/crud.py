@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from . import db_models, schemas
-
+from loguru import logger
 
 def postprocess_create(db: Session, db_item):
     db.add(db_item)
@@ -41,4 +41,5 @@ def create_character(db: Session, character: schemas.Character):
         role = character.role,
         backstory = character.backstory,
         game_id = character.game_id)
+    logger.info(f'creating {character}')
     return postprocess_create(db, db_item)
