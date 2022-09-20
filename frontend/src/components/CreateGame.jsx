@@ -13,6 +13,8 @@ export default function CreateGame() {
         <Button
         variant = "contained"
         onClick = {(_)=> PostData(CREATE_GAME_ENDPOINT, {game_id: gameText})}
-        />
+        >
+            Create {gameText}
+            </Button>
            </div>
 }

@@ -18,7 +18,6 @@ import {StoreContext} from "../storage/Store";
 
 export default function JoinGame() {
     const storedData  = useContext(StoreContext)
-    //console.log(storedData)
     const gameIds = (storedData.gameIds || [])//.map(x=>x.game_id)
     
     const [nameText, setNameText] = useState("")
@@ -102,10 +101,11 @@ export default function JoinGame() {
         />
         {(characterText.backstories || []).map((text,i)=>{
             const selected = selectedCharacter==i
-            return <Card key={i} sx={{ minWidth: 275, maxWidth:300 }} style={{backgroundColor: selected?"LightCyan":"Ivory"}} >
+            return <Card 
+            key={i} style={{marginBottom: "20px", marginLeft: "250px", marginRight: "250px",  backgroundColor: selected?"LightCyan":"Ivory"}} >
             <CardContent>
               <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                {nameText} the {roleText}
+                {characterText.name} the {characterText.role}
               </Typography>
               <Typography variant="body2">
                 {text}

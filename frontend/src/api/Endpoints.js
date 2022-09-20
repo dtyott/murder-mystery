@@ -4,4 +4,6 @@ export const GAME_ENDPOINT = '/api/games';
 export const CREATE_GAME_ENDPOINT = '/api/games/create';
 export const CHARACTER_ENDPOINT = '/api/characters';
 export const CREATE_CHARACTER_ENDPOINT = '/api/characters/create';
+export const WAGER_ENDPOINT = '/api/wagers';
+export const CREATE_WAGER_ENDPOINT = '/api/wagers/create';
 export const SOCKET_ADDRESS = 'ws://localhost:8000/websocket';

@@ -70,8 +70,8 @@ async def create_game(game: schemas.GameCreate, request: Request, background_tas
 
 @app.post("/api/characters", response_model=list[schemas.Character])
 async def read_characters(game: schemas.GameCreate, request: Request, db: Session = Depends(get_db)):
-    games = crud.get_characters(db, game.game_id)
-    return games
+    characters = crud.get_characters(db, game.game_id)
+    return characters
 
 @app.post("/api/characters/create", response_model=schemas.Character)
 async def create_character(character: schemas.Character, request: Request, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
@@ -84,8 +84,20 @@ async def create_character(character: schemas.Character, request: Request, backg
     background_tasks.add_task(broadcast_path, request.url.path)
     return crud.create_character(db=db, character=character)
 
+@app.post("/api/wagers", response_model=list[schemas.Wager])
+async def read_wagers(game: schemas.GameCreate, request: Request, db: Session = Depends(get_db)):
+    db_wagers = crud.get_wagers(db, game.game_id)
+    return crud.wager_db_to_schema(db, db_wagers)
 
-
+@app.post("/api/wagers/create", response_model=schemas.Wager)
+async def create_wager(wager: schemas.Wager, request: Request, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
+    db_game = crud.get_game(db, game_id=wager.game_id)
+    if not db_game:
+        raise HTTPException(status_code=400, detail="Game does not exist")
+    
+    background_tasks.add_task(broadcast_path, request.url.path)
+    crud.create_wager(db=db, wager=wager)
+    return wager
 
 @app.websocket("/websocket")
 async def websocket_endpoint(websocket: WebSocket):
