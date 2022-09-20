@@ -1,25 +1,43 @@
 .header {
     display: flex;
     justify-content: center;
+    text-decoration: none;
+    color: black;
+
   }
   
   .headerlink-title {
     color: black;
     text-decoration: none;
-    padding: 0 5px;
-  }
-
-  .headerlink-dot {
-    margin-top: -0.5rem;
-    opacity: 0;
-    transition: opacity 200ms linear;
+    padding: 0 2px;
   }
   
   .headerlink-title:hover .headerlink-dot {
     opacity: 1;
   }
   
-  .headerlink-dot-active {
-    margin-top: -0.5rem;
-    display: block;
+
+  .headerlink-no-link {
+    pointer-events: none;
+    background-color:lightgray;
+    justify-content: center;
+    text-decoration: none;
+    color: black;
+
+
+  }
+
+  .sticky {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 0 2px;
+    opacity: 1;
+    z-index:999;
+    background-color:lightskyblue;
+    text-decoration: none;
+    color: black;
+
   }

@@ -9,20 +9,29 @@ import JoinGame from './components/JoinGame';
 import CreateGame from './components/CreateGame';
 import Home from './components/Home';
 import Header from './components/Header';
+import Players from './components/Players';
+import Store from './components/Store';
+import Gambling from './components/Gambling';
+
 
 function App() {
 
-  const pages = ['create_game','join_game','home']
+  const pages = ['create_game','join_game','home', 'players', 'store', 'gambling']
 
   return (
     <Router>
           
-            <Header pages={pages}/>
+            
             <Routes>
-            <Route exact path="/create_game" element={<CreateGame/>} />
-            <Route exact path ="/join_game" element = {<JoinGame/>}/>
+            <Route exact path = "/create_game" element={<CreateGame/>} />
+            <Route exact path = "/join_game" element = {<JoinGame/>}/>
             <Route exact path = "/home" element = {<Home/>}/>
+            <Route exact path = "/players" element = {<Players/>}/>
+            <Route exact path = "/store" element = {<Store/>}/>
+            <Route exact path = "/gambling" element = {<Gambling/>}/>
+
             </Routes>
+            <Header pages={pages}/>
             
           
         </Router>

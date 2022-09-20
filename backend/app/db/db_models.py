@@ -17,3 +17,17 @@ class Character(Base):
     role = Column(String, index=True)
     backstory = Column(String)
     game_id = Column(String, ForeignKey("games.game_id"))
+    money = Column(Integer)
+
+class Wager(Base):
+    __tablename__ = "wagers"
+    id = Column(Integer, primary_key=True, index=True)
+    message = Column(String)
+    game_id = Column(String)
+    player1_id = Column(Integer)
+    player2_id = Column(Integer)
+    amount = Column(Integer)
+    accept = Column(Boolean)
+    active = Column(Boolean)
+    player1_winner = Column(Boolean)
+    player2_winner = Column(Boolean)

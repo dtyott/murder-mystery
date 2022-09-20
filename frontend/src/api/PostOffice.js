@@ -1,28 +1,28 @@
 import { POST_REQUEST_OPTIONS_BASE, GET_REQUEST_OPTIONS_BASE} from "./Params";
 
-function SendREST(endpoint, options, setter = (x)=>null) {
-     fetch(endpoint, options)
+function SendREST(endpoint, options, setter, contents) {
+    if (contents) {
+        options['body'] = JSON.stringify(contents)
+    }
+    console.log(options)
+    fetch(endpoint, options)
     .then(response=> {
         const json = response.json()
-        //console.log(json)
-        //console.log(response)
         return json
     })
     .then(json => {
-        //console.log(json)
         setter(json)
     })
     .catch(err => console.log('There was an error:' + err))
 }
 
-export function PostMessage(endpoint, contents){
+export function PostData(endpoint, contents, setter = (x)=>null){
     const requestOptions = POST_REQUEST_OPTIONS_BASE
-    requestOptions['body'] = JSON.stringify(contents)
-    SendREST(endpoint, requestOptions)
+    SendREST(endpoint, requestOptions, setter, contents)
 }
 
-export function GetData(endpoint, setter){
+export function GetData(endpoint, contents=null, setter = (x)=> null){
    
     const requestOptions = GET_REQUEST_OPTIONS_BASE
-    SendREST(endpoint, requestOptions, setter)
+    SendREST(endpoint, requestOptions, setter, contents)
 }

@@ -13,6 +13,7 @@ class CharacterBase(OurBaseModel):
 class Character(CharacterBase):
     backstory: str
     game_id: str
+    money: int = None
 
 class PotentialCharacter(CharacterBase):
     backstories: List[str]
@@ -22,3 +23,10 @@ class GameCreate(OurBaseModel):
 
 class Game(GameCreate):
     is_active: bool
+
+class Wager(OurBaseModel):
+    character1: CharacterBase
+    character2: CharacterBase
+    message: str
+    game_id: str
+    amount: int
