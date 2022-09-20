@@ -85,8 +85,31 @@ export default function Gambling() {
     return <div>
         <h1>{active_game_id? "Current game is "+ active_game_id: "No active game"}</h1>
         <h2>Active Wagers</h2>
-        {(storedData.wagers || []).map((w,i)=>{
-            return <li key={i}>{w.character1.name+" the "+w.character1.role} bets {w.character2.name+ " the "+ w.character2.role} ${w.amount} over {w.message}</li>
+        {(storedData.wagers || []).filter(x=>{
+            return ((x.character1.name==active_char_name) && (x.character1.role==active_char_role)) ||
+            ((x.character2.name==active_char_name) && (x.character2.role==active_char_role))
+        }).map((w,i)=>{
+            const myAmount = (storedData.characters || []).filter(c=>{
+                return (c.role==active_char_role) && (c.name==active_char_name)
+            }).map(x=>x.money)
+            const myMoney = myAmount.length==1? myAmount[0]: null
+            const existingRisk = (storedData.wagers || []).filter(x=>{
+                return ((x.character1.name==active_char_name) && (x.character1.role==active_char_role)) ||
+                            ((x.character2.name==active_char_name) && (x.character2.role==active_char_role))
+                        }).map(w=>w.amount).reduce((a,b)=> a+b,0) || 0
+            const wagering = w.amount
+            const cantAccept = wagering > myMoney
+
+            return <div>
+                    <li key={i}>{w.character1.name+" the "+w.character1.role} bets {w.character2.name+ " the "+ w.character2.role} ${w.amount} over {w.message}</li>
+                    <Button disabled = {cantAccept} variant="contained" color="success">
+                        Accept
+                    </Button>
+                    <Button variant="contained" color="error">
+                        Decline
+                    </Button>
+
+                </div>
         })}
         {characters.map((character,i)=>{
             const isYou = (character.name==active_char_name) && (character.role==active_char_role)
@@ -95,18 +118,14 @@ export default function Gambling() {
             }).map(x=>x.money)
             const myMoney = myAmount.length==1? myAmount[0]: null
             const youString = isYou? " (You)":""
-            const wagering = getUserRoleMatch(wagers, character.name, character.role).wager || 0
+            const wagering = getUserRoleMatch(wagers, character.name, character.role).wager || ""
             const existingRisk = (storedData.wagers || []).filter(x=>{
     return ((x.character1.name==active_char_name) && (x.character1.role==active_char_role)) ||
                 ((x.character2.name==active_char_name) && (x.character2.role==active_char_role))
             }).map(w=>w.amount).reduce((a,b)=> a+b,0) || 0
-            const tooMuchRisk = (parseInt(wagering) + existingRisk-myMoney) > 0
-            console.log(myAmount)
-            console.log(myMoney)
-            console.log(wagering)
-            console.log(existingRisk)
-            console.log(tooMuchRisk)
-            console.log(wagering + existingRisk-myMoney)
+            const tooMuchRisk = (parseInt(wagering || 0) + existingRisk-myMoney) > 0
+            const bettingOn = getUserRoleMatch(messages, character.name, character.role).message || ""
+            const noBet = (!wagering) || (!bettingOn)
             return <Accordion key={i}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -121,7 +140,7 @@ export default function Gambling() {
           id="outlined-required"
           label="Wager ($)"
           inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-          value ={getUserRoleMatch(wagers, character.name, character.role).wager || ""}
+          value ={wagering}
           onChange ={(e=> handleWagers(character.name, character.role, e.target.value))}
           disabled = {isYou}
         />
@@ -129,11 +148,11 @@ export default function Gambling() {
           required
           id="outlined-required"
           label="Condition"
-          value ={getUserRoleMatch(messages, character.name, character.role).message || ""}
+          value ={bettingOn}
           onChange ={(e=> handleMessages(character.name, character.role, e.target.value))}
           disabled = {isYou}
         />
-        <Button disabled = {isYou || tooMuchRisk} onClick={(_)=> handleSubmitWager(character.name, character.role)}>
+        <Button disabled = {isYou || tooMuchRisk || noBet} onClick={(_)=> handleSubmitWager(character.name, character.role)}>
         {isYou? "CANT BET SELF": tooMuchRisk? "INADEQUATE FUNDS": "PLACE BET"}
         </Button>
             </AccordionDetails>

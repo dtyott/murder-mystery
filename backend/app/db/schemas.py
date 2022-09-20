@@ -30,3 +30,6 @@ class Wager(OurBaseModel):
     message: str
     game_id: str
     amount: int
+    accepted: bool = False
+    active: bool = True
+    winner: str = None 

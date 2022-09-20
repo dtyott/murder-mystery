@@ -73,7 +73,9 @@ def wager_db_to_schema(db: Session, db_wagers):
         character2 = get_character_from_id(db, db_wager.player2_id),
         message= db_wager.message,
         game_id = db_wager.game_id,
-        amount= db_wager.amount) for db_wager in db_wagers]
+        amount= db_wager.amount,
+        accepted = db_wager.accept,
+        active = db_wager.active) for db_wager in db_wagers]
 
 def create_wager(db: Session, wager: schemas.Wager):
 
