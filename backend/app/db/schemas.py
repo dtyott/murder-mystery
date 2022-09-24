@@ -3,33 +3,24 @@ from typing import Union, List, Optional
 from pydantic import BaseModel
 
 class OurBaseModel(BaseModel):
+    id: str
+    game_id: str
     class Config:
         orm_mode = True
 
-class CharacterBase(OurBaseModel):
+class Game(OurBaseModel):
+    is_active: bool = False
+
+class Character(OurBaseModel):
     name: str
-    role: str
-
-class Character(CharacterBase):
-    backstory: str
-    game_id: str
-    money: int = None
-
-class PotentialCharacter(CharacterBase):
-    backstories: List[str]
-
-class GameCreate(OurBaseModel):
-    game_id: str
-
-class Game(GameCreate):
-    is_active: bool
+    backstory: Optional[str] = None
+    money: int = 0
 
 class Wager(OurBaseModel):
-    character1: CharacterBase
-    character2: CharacterBase
     message: str
-    game_id: str
-    amount: int
-    accepted: Optional[bool]
-    active: Optional[bool]
-    winner: Optional[str]
+    char1_id: str
+    char2_id: str
+    amount: int = 0
+    accepted: Optional[bool] = None
+    char1_declare_win: Optional[bool] = None
+    char2_declare_win: Optional[bool] = None

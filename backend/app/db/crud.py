@@ -1,8 +1,11 @@
 from sqlalchemy.orm import Session
+from fastapi import HTTPException
 
-from . import db_models, schemas
+from . import db_models, utils
 from loguru import logger
-from app.config import DEFAULT_MONEY
+import json
+
+form = lambda x: x[:1].upper() + x[1:-1]
 
 def postprocess_create(db: Session, db_item):
     logger.info(f'creating {db_item}')
@@ -11,79 +14,33 @@ def postprocess_create(db: Session, db_item):
     db.refresh(db_item)
     return db_item
 
-####games
+def get_from_db_helper(path: str, constraint_dict: dict, db: Session):
+    return get_db_elements_by_model(db, path.split("/")[-1], constraint_dict)
 
-def get_game(db: Session, game_id: str):
-    return db.query(db_models.Game).filter(db_models.Game.game_id == game_id).first()
+async def broadcast_path(path, manager):
+    msg = json.dumps({'path':path})
+    logger.info(f'broadcasting {msg}')
+    await manager.broadcast(msg)
 
-def get_games(db: Session):
-    return db.query(db_models.Game).all()
+def create_db_element_helper(path: str, element, db: Session, manager, background_tasks):
+    element_dict = element.__dict__
+    db_element = get_from_db_helper(path, element_dict, db)
+    model_name = path.split("/")[-1]
+    if db_element:
+        raise HTTPException(status_code=400, detail=f'{model_name} already exists')
+    background_tasks.add_task(broadcast_path, path, manager=manager)
+    return create_db_element_by_model(db, model_name, element_dict)
 
-def create_game(db: Session, game_id: str):
-    db_item = db_models.Game(game_id = game_id, is_active=False)
+def get_db_elements_by_model(db: Session, model_name:str, constraint_dict = {}):
+    model_cls = getattr(db_models, form(model_name))
+    elements = db.query(model_cls)
+    return elements.filter_by(**constraint_dict).all()
+
+def get_random_unused_id(db: Session, model_name:str):
+    db_elements = get_db_elements_by_model(db, model_name)
+    return utils.get_random_unused_id(db_elements)
+
+def create_db_element_by_model(db: Session, model_name:str, db_element):
+    model_cls = getattr(db_models, form(model_name))
+    db_item = model_cls(**db_element)
     return postprocess_create(db, db_item)
-
-####characters
-
-def get_character(db: Session, character: schemas.Character):
-    return db.query(db_models.Character).filter(
-        db_models.Character.game_id == character.game_id,
-        db_models.Character.name == character.name,
-        db_models.Character.role == character.role).first()
-
-def get_characters(db: Session, game_id: str):
-
-    return db.query(db_models.Character).filter(
-        db_models.Character.game_id == game_id
-    ).all()
-
-def get_character_id(db: Session, game_id: str, character: schemas.CharacterBase):
-    query = db.query(db_models.Character).filter(
-        db_models.Character.game_id == game_id,
-        db_models.Character.name == character.name,
-        db_models.Character.role == character.role
-    ).first()
-    return query.id if query else None
-
-def get_character_from_id(db: Session, id: int):
-    query = db.query(db_models.Character).filter(
-        db_models.Character.id == id
-    ).first()
-    return query
-
-def create_character(db: Session, character: schemas.Character):
-    db_item = db_models.Character(
-        name = character.name,
-        role = character.role,
-        backstory = character.backstory,
-        game_id = character.game_id,
-        money = character.money or DEFAULT_MONEY)
-    return postprocess_create(db, db_item)
-
-def get_wagers(db: Session, game_id: str):
-
-    return db.query(db_models.Wager).filter(
-        db_models.Wager.game_id == game_id
-    )
-
-def wager_db_to_schema(db: Session, db_wagers):
-    return [
-        schemas.Wager(
-        character1 = get_character_from_id(db, db_wager.player1_id),
-        character2 = get_character_from_id(db, db_wager.player2_id),
-        message= db_wager.message,
-        game_id = db_wager.game_id,
-        amount= db_wager.amount,
-        accepted = db_wager.accept,
-        active = db_wager.active) for db_wager in db_wagers]
-
-def create_wager(db: Session, wager: schemas.Wager):
-
-    db_item = db_models.Wager(
-        game_id = wager.game_id,
-        message = wager.message,
-        player1_id = get_character_id(db, wager.game_id, wager.character1),
-        player2_id = get_character_id(db, wager.game_id, wager.character2),
-        amount = wager.amount,
-        active = True)
-    return postprocess_create(db, db_item) 

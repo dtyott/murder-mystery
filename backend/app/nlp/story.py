@@ -1,6 +1,5 @@
 import torch
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
-from app.db.schemas import CharacterBase
 import spacy
 
 spacy.load('en_core_web_sm')
@@ -15,8 +14,8 @@ def get_text_from_sequence(sequence: str, length: int) -> str:
     text = TOKENIZER.decode(outputs[0], skip_special_tokens=True)
     return text
 
-def make_story_for_character(character: CharacterBase, length: int) -> str:
-    sequence = f'{character.name} the {character.role} is'
+def make_story_for_character(name: str, length: int) -> str:
+    sequence = f'{name} is'
     text = get_text_from_sequence(sequence, length = length)
     return f'{text.split(".")[0]}.'
 
