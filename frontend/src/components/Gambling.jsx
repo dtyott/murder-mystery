@@ -10,8 +10,6 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { PostData } from '../api/PostOffice';
 import { CREATE_WAGER_ENDPOINT } from '../api/Endpoints';
-import { compose } from '@mui/system';
-
 
 
 export default function Gambling() {
@@ -99,12 +97,14 @@ export default function Gambling() {
                         }).map(w=>w.amount).reduce((a,b)=> a+b,0) || 0
             const wagering = w.amount
             const cantAccept = wagering > myMoney
-
-            return <div>
-                    <li key={i}>{w.character1.name+" the "+w.character1.role} bets {w.character2.name+ " the "+ w.character2.role} ${w.amount} over {w.message}</li>
-                    <Button disabled = {cantAccept} variant="contained" color="success">
+            const showAccept = ((w.character2.name==active_char_name) && (w.character2.role==active_char_role)) && (!w.accepted)
+            const showDecline = !w.accepted
+            
+            return <div key={i}>
+                    <li>{w.character1.name+" the "+w.character1.role} bets {w.character2.name+ " the "+ w.character2.role} ${w.amount} over {w.message}</li>
+                    { showAccept? <Button disabled = {cantAccept} variant="contained" color="success">
                         Accept
-                    </Button>
+                    </Button> :null}
                     <Button variant="contained" color="error">
                         Decline
                     </Button>

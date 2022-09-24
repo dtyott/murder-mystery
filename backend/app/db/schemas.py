@@ -1,4 +1,4 @@
-from typing import Union, List
+from typing import Union, List, Optional
 
 from pydantic import BaseModel
 
@@ -30,6 +30,6 @@ class Wager(OurBaseModel):
     message: str
     game_id: str
     amount: int
-    accepted: bool = False
-    active: bool = True
-    winner: str = None 
+    accepted: Optional[bool]
+    active: Optional[bool]
+    winner: Optional[str]

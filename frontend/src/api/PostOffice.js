@@ -5,6 +5,7 @@ function SendREST(endpoint, options, setter, contents) {
         options['body'] = JSON.stringify(contents)
     }
     console.log(options)
+    console.log(endpoint)
     fetch(endpoint, options)
     .then(response=> {
         const json = response.json()
