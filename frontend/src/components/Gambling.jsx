@@ -57,8 +57,15 @@ export default function Gambling() {
         if (!accept) {
             data['active'] = false
         }
+        return UpdateData(UPDATE_WAGER_ENDPOINT, data) 
+    }
 
-
+    function handleVictory(wager, myCharId, playerWon) {
+        const data = {
+            id: wager.id,
+            game_id: wager.game_id,
+            [myCharId]: playerWon
+        }
         return UpdateData(UPDATE_WAGER_ENDPOINT, data) 
     }
 
@@ -73,6 +80,7 @@ export default function Gambling() {
                 me = {character}
                 existingRisk = {existingRisk}
                 handleAccept = {handleAccept}
+                handleVictory = {handleVictory}
                 />
             })}
             {characters.map((c,i)=>{

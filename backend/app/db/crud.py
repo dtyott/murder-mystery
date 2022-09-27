@@ -50,10 +50,11 @@ def update_db_element_helper(path: str, element, db: Session, manager, backgroun
     background_tasks.add_task(broadcast_path, path, manager=manager)
     return update_db_element_by_model(db, model_name, query_params, db_update)
 
-def get_db_elements_by_model(db: Session, model_name:str, constraint_dict = {}):
+def get_db_elements_by_model(db: Session, model_name:str, constraint_dict = {}, method = 'time_created'):
     model_cls = getattr(db_models, form(model_name))
     elements = db.query(model_cls)
-    return elements.filter_by(**constraint_dict).all()
+    unordered = elements.filter_by(**constraint_dict).all()
+    return sorted(unordered, key = lambda x: getattr(x, method))
 
 def get_random_unused_id(db: Session, model_name:str):
     db_elements = get_db_elements_by_model(db, model_name)
