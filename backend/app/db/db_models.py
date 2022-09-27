@@ -29,3 +29,4 @@ class Wager(Base):
     accepted = Column(Boolean, nullable=True)
     char1_declare_win = Column(Boolean, nullable=True)
     char2_declare_win = Column(Boolean, nullable=True)
+    active = Column(Boolean, default = True)

@@ -1,10 +1,6 @@
 import './App.css';
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route
-} from "react-router-dom";
+import {BrowserRouter as Router, Routes,Route} from "react-router-dom";
 import JoinGame from './components/JoinGame';
 import CreateGame from './components/CreateGame';
 import Home from './components/Home';
@@ -20,22 +16,16 @@ function App() {
 
   return (
     <Router>
-          
-            
-            <Routes>
-            <Route exact path = "/create_game" element={<CreateGame/>} />
-            <Route exact path = "/join_game" element = {<JoinGame/>}/>
-            <Route exact path = "/home" element = {<Home/>}/>
-            <Route exact path = "/players" element = {<Players/>}/>
-            <Route exact path = "/store" element = {<Store/>}/>
-            <Route exact path = "/gambling" element = {<Gambling/>}/>
-
-            </Routes>
-            <Header pages={pages}/>
-            
-          
-        </Router>
-      );
-}
+        <Routes>
+          <Route exact path = "/create_game" element={<CreateGame/>} />
+          <Route exact path = "/join_game" element = {<JoinGame/>}/>
+          <Route exact path = "/home" element = {<Home/>}/>
+          <Route exact path = "/players" element = {<Players/>}/>
+          <Route exact path = "/store" element = {<Store/>}/>
+          <Route exact path = "/gambling" element = {<Gambling/>}/>
+        </Routes>
+        <Header pages={pages}/>      
+    </Router>
+      );}
 
 export default App;

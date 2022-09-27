@@ -7,26 +7,22 @@ export default function Players() {
     const storedData  = useContext(StoreContext)
     const characters = storedData.characters || []
     const [active_game_id, setActiveGameId] = useState(getActiveGameId())
-    const [active_char_name, setActiveCharName] = useState(getAttributeForGame('name', active_game_id))
-    const [active_char_role, setActiveCharRole] = useState(getAttributeForGame('role', active_game_id))
+    const [active_char_id, setActiveCharId] = useState(getAttributeForGame('character_id', active_game_id))
 
     function handleClick(i) {
-        const newName = characters[i].name
-        const newRole = characters[i].role
-        setAttributeForGame('name', active_game_id, newName)
-        setAttributeForGame('role', active_game_id, newRole)
-        setActiveCharName(getAttributeForGame('name', active_game_id))
-        setActiveCharRole(getAttributeForGame('role', active_game_id))
+        const newId = characters[i].id
+        setAttributeForGame('character_id', active_game_id, newId)
+        setActiveCharId(getAttributeForGame('character_id', active_game_id))
     }
 
-    return <div>
+    return <div style={{paddingBottom: "100px"}}>
         <h1>{active_game_id? "Current game is "+ active_game_id: "No active game"}</h1>
         {characters.map((character,i)=>{
-            const isYou = (character.name==active_char_name) && (character.role==active_char_role)
+            const isYou = (character.id==active_char_id)
             const youString = isYou? " (You)":""
             
             return <div key={i} >
-            <h2>{character.name} the {character.role}{youString}</h2> 
+            <h2>{character.name}{youString}</h2> 
             <li>{character.backstory}</li>
             <Button onClick={(e)=>handleClick(i)}>
                 Pick Me!

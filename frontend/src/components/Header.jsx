@@ -15,7 +15,7 @@ const iconMap = {
   home: HomeIcon,
   players: PeopleIcon,
   gambling: CasinoIcon,
-  store: LocalGroceryStoreIcon
+  store: LocalGroceryStoreIcon,
 }
 
 const textMap = {
@@ -31,7 +31,7 @@ const HeaderLink = ({ page }) => {
   const title = textMap[page]
   const Icon = iconMap[page]
 
-  const location = useLocation(); // React Hook
+  const location = useLocation();
   const selected = '/'+page == location.pathname
   let className = selected ? 'headerlink-no-link ' : '';
   className += 'headerlink-title';
@@ -39,19 +39,15 @@ const HeaderLink = ({ page }) => {
   return<div className={className}>
       
 <Link to={`/${page}`} className={className} >
-<div className='header'>
-<Icon/>
-</div> 
-  {title}
-
-</Link>
-</div>
-
-  
+  <div className='header'>
+    <Icon/>
+  </div> 
+    {title}
+    </Link>
+  </div>  
 };
 
 export default function Header(input){
-
     return (
       <div className='sticky'>
         {input.pages.map((page,i)=>{
