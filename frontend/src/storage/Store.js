@@ -2,7 +2,8 @@ import {React, createContext, useEffect, useRef, useState} from 'react'
 import { RANDOM_GAME_ENDPOINT, RANDOM_CHARACTER_ENDPOINT, RANDOM_WAGER_ENDPOINT,
 GAME_ENDPOINT, CHARACTER_ENDPOINT, WAGER_ENDPOINT,
 CREATE_GAME_ENDPOINT, CREATE_CHARACTER_ENDPOINT, CREATE_WAGER_ENDPOINT,
-SOCKET_ADDRESS,UPDATE_WAGER_ENDPOINT,UPDATE_GAME_ENDPOINT,UPDATE_CHARACTER_ENDPOINT
+SOCKET_ADDRESS,UPDATE_WAGER_ENDPOINT,UPDATE_GAME_ENDPOINT,UPDATE_CHARACTER_ENDPOINT,
+GAME_ENDPOINTS, CHARACTER_ENDPOINTS, WAGER_ENDPOINTS
 } from "../api/Endpoints";
 import { PostData, GetData } from '../api/PostOffice';
 import { getActiveGameId} from './Keys';
@@ -23,23 +24,23 @@ export default ({ children }) => {
 
     const [connectionOpen, setConnectionOpen] = useState(false);
     const ws = useRef();
+
     const websocketEndpointDict = {
-        [CREATE_GAME_ENDPOINT]: GAME_ENDPOINT,
-        [CREATE_CHARACTER_ENDPOINT]: CHARACTER_ENDPOINT,
-        [CREATE_WAGER_ENDPOINT]: WAGER_ENDPOINT,
-        [UPDATE_GAME_ENDPOINT]: GAME_ENDPOINT,
-        [UPDATE_CHARACTER_ENDPOINT]: CHARACTER_ENDPOINT,
-        [UPDATE_WAGER_ENDPOINT]: WAGER_ENDPOINT
+        [CREATE_GAME_ENDPOINT]: GAME_ENDPOINTS,
+        [CREATE_CHARACTER_ENDPOINT]: CHARACTER_ENDPOINTS,
+        [CREATE_WAGER_ENDPOINT]: WAGER_ENDPOINTS,
+        [UPDATE_GAME_ENDPOINT]: GAME_ENDPOINTS,
+        [UPDATE_CHARACTER_ENDPOINT]: CHARACTER_ENDPOINTS,
+        [UPDATE_WAGER_ENDPOINT]: WAGER_ENDPOINTS.concat(CHARACTER_ENDPOINTS)
     }
 
-    const websocketSetterDict = {
-        [GAME_ENDPOINT]: [{setter:setGames, endpoint:GAME_ENDPOINT}, {setter:setRandomGameId, endpoint:RANDOM_GAME_ENDPOINT}],
-        [CHARACTER_ENDPOINT]: [{setter:setCharacters, endpoint:CHARACTER_ENDPOINT}, {setter:setRandomCharacterId, endpoint: RANDOM_CHARACTER_ENDPOINT}],
-        [WAGER_ENDPOINT]: [{setter:setWagers, endpoint:WAGER_ENDPOINT}, {setter:setRandomWagerId, endpoint: RANDOM_WAGER_ENDPOINT}],
-        [UPDATE_GAME_ENDPOINT]: [{setter:setGames, endpoint:GAME_ENDPOINT}],
-        [UPDATE_CHARACTER_ENDPOINT]: [{setter:setCharacters, endpoint:CHARACTER_ENDPOINT}],
-        [UPDATE_WAGER_ENDPOINT]: [{setter:setWagers, endpoint:WAGER_ENDPOINT}]
-    
+    const endpointToSetter = {
+        [GAME_ENDPOINT]: setGames,
+        [CHARACTER_ENDPOINT]: setCharacters,
+        [WAGER_ENDPOINT]: setWagers,
+        [RANDOM_GAME_ENDPOINT]: setRandomGameId,
+        [RANDOM_CHARACTER_ENDPOINT]: setRandomCharacterId,
+        [RANDOM_WAGER_ENDPOINT]: setRandomWagerId
     }
 
     const contentsDict = {
@@ -71,14 +72,15 @@ export default ({ children }) => {
         ws.current.onmessage = (event) => {
         const data = JSON.parse(event.data);
         const fromPath = data.path
-        const toPath = websocketEndpointDict[fromPath]
-        if (toPath) {
-        
-            const setters = websocketSetterDict[toPath]
-            setters.forEach((dict)=>{
-                setStateFromRoute(dict.setter, dict.endpoint)
-            })
-        }};
+        console.log(fromPath)
+        const toPaths = websocketEndpointDict[fromPath]
+        console.log(toPaths)
+        toPaths.forEach(path =>{
+            const setter = endpointToSetter[path]
+            if (setter) {
+                setStateFromRoute(setter, path)
+            }
+        })}
 
         return () => {
         if (connectionOpen) {

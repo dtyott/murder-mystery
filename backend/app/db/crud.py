@@ -3,6 +3,7 @@ from fastapi import HTTPException
 from sqlalchemy import update
 
 from . import db_models, utils
+from app.db.resolvers import resolve_db_updates
 from loguru import logger
 import json
 
@@ -15,11 +16,13 @@ def postprocess_create(db: Session, db_item):
     db.refresh(db_item)
     return db_item
 
-def postprocess_update(db:Session, model_name, query_params, db_update):
-    logger.info(f'updating {db_update} where {query_params}')
+def postprocess_update(db:Session, model_name, query_params, db_update, q):
+    logger.info(f'postprocessing {db_update} where {query_params}')
+    updated_elements = get_db_elements_by_model(db, model_name, query_params)
     db.commit()
-    maybe_db_elt = get_db_elements_by_model(db, model_name, query_params)
-    return maybe_db_elt[0] if maybe_db_elt else {}
+    resolve_db_updates(db, model_name, updated_elements, db_update)
+    db.commit()
+    return q.all()
 
 def get_from_db_helper(path: str, constraint_dict: dict, db: Session):
     return get_db_elements_by_model(db, path.split("/")[-1], constraint_dict)
@@ -70,4 +73,4 @@ def update_db_element_by_model(db: Session, model_name:str, query_params:dict, d
     q = db.query(model_cls).filter_by(**query_params)
     logger.info(f'query is {q}')
     q.update(db_update,synchronize_session=False)
-    return postprocess_update(db, model_name, query_params, db_update)
+    return postprocess_update(db, model_name, query_params, db_update, q)

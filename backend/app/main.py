@@ -78,15 +78,15 @@ async def create_element(request: Request, element: schemas.Wager, background_ta
 
 ##update in db
 
-@app.put("/api/db/update/games", response_model=schemas.Game)
+@app.put("/api/db/update/games", response_model=list[schemas.Game])
 async def create_element(request: Request, element: schemas.GameUpdate, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     return crud.update_db_element_helper(request.url.path, element, db, manager, background_tasks)
 
-@app.put("/api/db/update/characters", response_model=schemas.Character)
+@app.put("/api/db/update/characters", response_model=list[schemas.Character])
 async def create_element(request: Request, element: schemas.CharacterUpdate, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     return crud.update_db_element_helper(request.url.path, element, db, manager, background_tasks)
 
-@app.put("/api/db/update/wagers", response_model=schemas.Wager)
+@app.put("/api/db/update/wagers", response_model=list[schemas.Wager])
 async def create_element(request: Request, element: schemas.WagerUpdate, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     return crud.update_db_element_helper(request.url.path, element, db, manager, background_tasks)
 

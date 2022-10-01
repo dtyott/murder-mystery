@@ -35,6 +35,7 @@ class Wager(OurBaseModel):
     char1_declare_win: Optional[bool] = None
     char2_declare_win: Optional[bool] = None
     active: bool = True
+    winner: Optional[str] = None
 
 class WagerUpdate(OurBaseModel):
     message: Optional[str] = None
@@ -45,3 +46,4 @@ class WagerUpdate(OurBaseModel):
     char1_declare_win: Optional[bool] = None
     char2_declare_win: Optional[bool] = None
     active: Optional[bool] = None
+    winner: Optional[str] = None
