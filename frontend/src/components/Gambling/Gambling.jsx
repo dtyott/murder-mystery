@@ -1,10 +1,10 @@
 import {React, useState} from 'react';
-import { PostData, UpdateData } from '../api/PostOffice';
-import { CREATE_WAGER_ENDPOINT, UPDATE_WAGER_ENDPOINT } from '../api/Endpoints';
-import WagerCard from "./WagerCard";
+import { PostData, UpdateData } from '../../api/PostOffice';
+import { CREATE_WAGER_ENDPOINT, UPDATE_WAGER_ENDPOINT } from '../../api/Endpoints';
+import WagerCard from './WagerCard';
 import WagerLine from './WagerLine';
-import { GetActiveCharacter, GetActiveGame, GetCharacters, GetRandomIds, GetWagers } from "../storage/Register"
-import { getAcceptedWagers, getActiveWagers, getOutstandingWagerRisk, getWagersForCharacter } from "../utils/gamblingUtils"
+import { GetActiveCharacter, GetActiveGame, GetCharacters, GetRandomIds, GetWagers } from "../../storage/Register"
+import { getAcceptedWagers, getActiveWagers, getOutstandingWagerRisk, getWagersForCharacter } from "./Utils"
 
 
 export default function Gambling() {

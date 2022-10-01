@@ -1,4 +1,4 @@
-import { formatWagerForCharacter } from "../utils/gamblingUtils"
+import { formatWagerForCharacter } from "./Utils"
 import { Button } from "@mui/material"
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';

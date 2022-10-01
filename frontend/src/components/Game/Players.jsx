@@ -1,6 +1,6 @@
 import {React, useContext, useState} from 'react';
-import { getActiveGameId, getAttributeForGame, setAttributeForGame } from '../storage/Keys';
-import {StoreContext} from "../storage/Store";
+import { getActiveGameId, getAttributeForGame, setAttributeForGame } from '../../storage/Keys';
+import {StoreContext} from "../../storage/Store";
 import { Button } from '@mui/material';
 
 export default function Players() {
