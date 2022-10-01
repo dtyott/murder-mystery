@@ -1,14 +1,13 @@
 import './App.css';
 import React from "react";
 import {BrowserRouter as Router, Routes,Route} from "react-router-dom";
-import JoinGame from './components/JoinGame';
-import CreateGame from './components/CreateGame';
 import Home from './components/Home';
 import Header from './components/Header';
-import Players from './components/Players';
+import Players from './components/Game/Players';
 import Store from './components/Store';
-import Gambling from './components/Gambling';
-
+import JoinGame from './components/Game/JoinGame';
+import CreateGame from './components/Game/CreateGame';
+import Gambling from './components/Gambling/Gambling';
 
 function App() {
 

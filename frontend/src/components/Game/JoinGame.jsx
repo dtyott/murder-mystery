@@ -1,10 +1,10 @@
-import {React, useState, useContext, useEffect} from 'react';
-import { POTENTIAL_CHARACTER_ENDPOINT, CREATE_CHARACTER_ENDPOINT } from "../api/Endpoints";
-import { setActiveGameId, setAttributeForGame } from "../storage/Keys";
-import { PostData } from "../api/PostOffice";
-import CharacterCard from "./CharacterCard";
-import { GetGames, GetRandomIds } from "../storage/Register";
-import { CharacterSelector } from "./CharacterSelector";
+import {React, useState, useEffect} from 'react';
+import { POTENTIAL_CHARACTER_ENDPOINT, CREATE_CHARACTER_ENDPOINT } from "../../api/Endpoints";
+import { setActiveGameId, setAttributeForGame } from "../../storage/Keys";
+import { PostData } from "../../api/PostOffice";
+import CharacterCard from "../Character/CharacterCard";
+import { GetGames, GetRandomIds } from "../../storage/Register";
+import { CharacterSelector } from "../Character/CharacterSelector";
 import { GameSelector } from './GameSelector';
 
 

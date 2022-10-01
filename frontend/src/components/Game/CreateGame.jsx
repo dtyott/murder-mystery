@@ -1,8 +1,8 @@
 import {Button } from "@mui/material";
 import {React} from 'react';
-import { PostData } from "../api/PostOffice";
-import { CREATE_GAME_ENDPOINT } from "../api/Endpoints";
-import { GetRandomIds } from "../storage/Register";
+import { PostData } from "../../api/PostOffice";
+import { CREATE_GAME_ENDPOINT } from "../../api/Endpoints";
+import { GetRandomIds } from "../../storage/Register";
 
 export default function CreateGame() {
     const gameText = GetRandomIds().randomGameId.id
