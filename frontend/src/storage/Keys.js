@@ -14,6 +14,7 @@ export function getActiveGameId() {
 }
 
 export function setAttributeForGame(attribute, game_id, val) {
+
     localStorage.setItem(makeKey(attribute, game_id), val)
 }
 

@@ -1,32 +1,49 @@
-from typing import Union, List
+from typing import Union, List, Optional
 
 from pydantic import BaseModel
 
+from app.config import DEFAULT_MONEY
+
 class OurBaseModel(BaseModel):
+    id: str
+    game_id: str
     class Config:
         orm_mode = True
 
-class CharacterBase(OurBaseModel):
+class Game(OurBaseModel):
+    is_active: bool = False
+
+class GameUpdate(OurBaseModel):
+    is_active: Optional[bool] = None
+
+class Character(OurBaseModel):
     name: str
-    role: str
+    backstory: Optional[str] = None
+    money: int = DEFAULT_MONEY
 
-class Character(CharacterBase):
-    backstory: str
-    game_id: str
-    money: int = None
-
-class PotentialCharacter(CharacterBase):
-    backstories: List[str]
-
-class GameCreate(OurBaseModel):
-    game_id: str
-
-class Game(GameCreate):
-    is_active: bool
+class CharacterUpdate(OurBaseModel):
+    name: Optional[str] = None
+    backstory: Optional[str] = None
+    money: Optional[int] = None
 
 class Wager(OurBaseModel):
-    character1: CharacterBase
-    character2: CharacterBase
     message: str
-    game_id: str
-    amount: int
+    char1_id: str
+    char2_id: str
+    amount: int = 0
+    accepted: Optional[bool] = None
+    char1_declare_win: Optional[bool] = None
+    char2_declare_win: Optional[bool] = None
+    active: bool = True
+    winner: Optional[str] = None
+
+class WagerUpdate(OurBaseModel):
+    message: Optional[str] = None
+    char1_id: Optional[str] = None
+    char2_id: Optional[str] = None
+    amount: Optional[int] = None
+    accepted: Optional[bool] = None
+    char1_declare_win: Optional[bool] = None
+    char2_declare_win: Optional[bool] = None
+    active: Optional[bool] = None
+    winner: Optional[str] = None

@@ -1,14 +1,12 @@
-import React from 'react';
-import { getActiveGameId, getAttributeForGame } from '../storage/Keys';
-
+import {React} from 'react';
+import { GetActiveCharacter, GetActiveGame } from '../storage/Register';
 
 export default function Home() {
+    const active_game = GetActiveGame()
+    const active_char = GetActiveCharacter()
 
-    const active_game_id = getActiveGameId()
-    const active_char_name = getAttributeForGame('name', active_game_id)
-    const active_char_role = getAttributeForGame('role', active_game_id)
     return <div>
-        <h1>{active_game_id? "Current game is "+ active_game_id: "No active game"}</h1>
-        <h1>{active_game_id? "Welcome " +active_char_name + " the "+ active_char_role:""}</h1>
+        <h1>{active_game? "Current game is "+ active_game.id: "No active game"}</h1>
+        <h1>{active_char? "Welcome " +active_char.name:"Create a character"}</h1>
            </div>
 }
