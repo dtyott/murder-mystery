@@ -1,12 +1,12 @@
-import {React, useContext, useState} from 'react';
-import { getActiveGameId, getAttributeForGame, setAttributeForGame } from '../../storage/Keys';
-import {StoreContext} from "../../storage/Store";
+import {React, useState} from 'react';
+import { getAttributeForGame, setAttributeForGame } from '../../storage/Keys';
 import { Button } from '@mui/material';
+import { GetActiveGame, GetCharacters } from '../../storage/Register';
 
 export default function Players() {
-    const storedData  = useContext(StoreContext)
-    const characters = storedData.characters || []
-    const [active_game_id, setActiveGameId] = useState(getActiveGameId())
+    const characters = GetCharacters()
+    const activeGame = GetActiveGame()
+    const active_game_id = activeGame? activeGame.id: null
     const [active_char_id, setActiveCharId] = useState(getAttributeForGame('character_id', active_game_id))
 
     function handleClick(i) {

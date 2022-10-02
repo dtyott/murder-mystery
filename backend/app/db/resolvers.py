@@ -1,8 +1,22 @@
 from sqlalchemy.orm import Session
 from app.db import db_models
 from loguru import logger
+
+from app.db.schemas import STORE_DEFAULTS
+from app.db.db_models import Store
+from app.db import utils
+
 form = lambda x: x[:1].upper() + x[1:-1]
 
+
+def resolve_db_creates(db: Session, db_item):
+    table_name = db_item.__tablename__
+    if table_name == 'games':
+        for default in STORE_DEFAULTS:
+            default['game_id'] = db_item.game_id
+            default['id'] = db_item.game_id + default['item_name']
+            db.add(Store(**default))
+    db.commit()
 
 
 def resolve_db_updates(db: Session, model_name:str, updated_elements, db_update:dict):

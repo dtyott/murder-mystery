@@ -2,8 +2,9 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from sqlalchemy import update
 
+from app.db.resolvers import resolve_db_creates, resolve_db_updates
+
 from . import db_models, utils
-from app.db.resolvers import resolve_db_updates
 from loguru import logger
 import json
 
@@ -13,6 +14,7 @@ def postprocess_create(db: Session, db_item):
     logger.info(f'creating {db_item}')
     db.add(db_item)
     db.commit()
+    resolve_db_creates(db, db_item)
     db.refresh(db_item)
     return db_item
 
@@ -24,8 +26,8 @@ def postprocess_update(db:Session, model_name, query_params, db_update, q):
     db.commit()
     return q.all()
 
-def get_from_db_helper(path: str, constraint_dict: dict, db: Session):
-    return get_db_elements_by_model(db, path.split("/")[-1], constraint_dict)
+def get_from_db_helper(path: str, constraint_dict: dict, db: Session, method = "time_created"):
+    return get_db_elements_by_model(db, path.split("/")[-1], constraint_dict, method = method)
 
 async def broadcast_path(path, manager):
     msg = json.dumps({'path':path})
