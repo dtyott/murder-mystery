@@ -55,6 +55,5 @@ export default function JoinGame() {
             return <CharacterCard key = {i} selected = {selected} text = {text} handleCreate = {handleCreate} setSelectedCharacter = {setSelectedCharacter}
                     fullNameText = {fullNameText}
                     index = {i}/> })}
-                    <h1>New Char Id is {randomIds.randomCharacterId.id }</h1>
     </div>
 }

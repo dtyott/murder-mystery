@@ -6,8 +6,15 @@ import HomeIcon from '@mui/icons-material/Home';
 import PeopleIcon from '@mui/icons-material/People';
 import CasinoIcon from '@mui/icons-material/Casino';
 import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
-
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import WidgetsIcon from '@mui/icons-material/Widgets';
 import './Header.css';
+import { GetActiveCharacter } from '../storage/Register';
+
+const MAX_HP = 3
+
+
 
 const iconMap = {
   create_game: CreateNewFolderIcon,
@@ -16,6 +23,7 @@ const iconMap = {
   players: PeopleIcon,
   gambling: CasinoIcon,
   store: LocalGroceryStoreIcon,
+  inventory: WidgetsIcon
 }
 
 const textMap = {
@@ -24,6 +32,7 @@ const textMap = {
   home: "Home",
   players: "Players",
   gambling: "Gambling",
+  inventory: "Inventory",
   store: "Store"
 }
 
@@ -48,8 +57,25 @@ const HeaderLink = ({ page }) => {
 };
 
 export default function Header(input){
+
+    const character = GetActiveCharacter()
+    const hp = character.hp
+
     return (
       <div className='sticky'>
+        <div className = "header">
+        <div>
+        {[...Array(MAX_HP).keys()].map(i=>{
+         return i+1<=hp? <FavoriteIcon key={i}/>: <FavoriteBorderIcon key={i}/>
+        })}
+        
+        <div>
+        {"$"+character.money}
+        </div>
+        </div>
+        </div>
+        
+        
         {input.pages.map((page,i)=>{
           return <HeaderLink key={i} page={page} /> 
         })}

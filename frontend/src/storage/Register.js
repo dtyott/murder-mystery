@@ -22,7 +22,9 @@ export function GetRandomIds() {
     return {
       randomGameId: storedData.randomGameId||{},
       randomCharacterId: storedData.randomCharacterId||{},
-      randomWagerId: storedData.randomWagerId||{}
+      randomWagerId: storedData.randomWagerId||{},
+      randomItemId: storedData.randomItemId||{},
+      randomStoreId: storedData.randomStoreId||{}
     }
 }
 
@@ -45,4 +47,20 @@ export function GetWagers() {
     const activeGame = GetActiveGame()
     const activeGameId = activeGame? activeGame.id: null
     return wagersRaw.filter(w => w.game_id == activeGameId) || []
+}
+
+export function GetItems() {
+    const storedData = useContext(StoreContext)
+    const itemsRaw = storedData.items || []
+    const activeGame = GetActiveGame()
+    const activeGameId = activeGame? activeGame.id: null
+    return itemsRaw.filter(w => w.game_id == activeGameId) || []
+}
+
+export function GetStores() {
+    const storedData = useContext(StoreContext)
+    const storesRaw = storedData.stores || []
+    const activeGame = GetActiveGame()
+    const activeGameId = activeGame? activeGame.id: null
+    return storesRaw.filter(w => w.game_id == activeGameId) || []
 }
