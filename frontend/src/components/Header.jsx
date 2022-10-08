@@ -10,10 +10,14 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import WidgetsIcon from '@mui/icons-material/Widgets';
 import './Header.css';
-import { GetActiveCharacter } from '../storage/Register';
+import { GetActiveCharacter, GetFastLoadTimeStamp } from '../storage/Register';
+import CircularProgress from '@mui/material/CircularProgress';
+import { POLL_SPEED_FAST } from '../api/Endpoints';
+import { useState } from 'react';
+import { useInterval } from '../storage/Utils';
 
 const MAX_HP = 3
-
+const HEADER_TICK_SPEED = 100
 
 
 const iconMap = {
@@ -51,15 +55,21 @@ const HeaderLink = ({ page }) => {
   <div className='header'>
     <Icon/>
   </div> 
-    {title}
     </Link>
   </div>  
 };
 
 export default function Header(input){
+    const [tickTime, setTickTime] = useState(new Date())
+
+  useInterval(()=>{
+      setTickTime(new Date())
+  }, HEADER_TICK_SPEED)
 
     const character = GetActiveCharacter()
     const hp = character.hp
+    const progress = 10+100*(tickTime - GetFastLoadTimeStamp())/POLL_SPEED_FAST
+
 
     return (
       <div className='sticky'>
@@ -79,6 +89,9 @@ export default function Header(input){
         {input.pages.map((page,i)=>{
           return <HeaderLink key={i} page={page} /> 
         })}
+       {false?<div>
+        <CircularProgress variant="determinate" value={progress} />
+        </div>:null}
       </div>
     );
   };

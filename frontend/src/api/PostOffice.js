@@ -4,9 +4,12 @@ function SendREST(endpoint, options, setter, contents) {
     if (contents) {
         options['body'] = JSON.stringify(contents)
     }
-    console.log(options)
-    console.log(endpoint)
-    fetch(endpoint, options)
+    //console.log(options)
+    //console.log(endpoint)
+    const urlStart = process.env.REACT_APP_SERVER_URL == 'localhost:5000'? 'http://':'https://'
+    const serverUrl = urlStart+ process.env.REACT_APP_SERVER_URL
+    //console.log(serverUrl)
+    fetch(serverUrl+endpoint, options)
     .then(response=> {
         const json = response.json()
         return json

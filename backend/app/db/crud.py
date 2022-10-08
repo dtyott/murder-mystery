@@ -29,21 +29,15 @@ def postprocess_update(db:Session, model_name, query_params, db_update, q):
 def get_from_db_helper(path: str, constraint_dict: dict, db: Session, method = "time_created"):
     return get_db_elements_by_model(db, path.split("/")[-1], constraint_dict, method = method)
 
-async def broadcast_path(path, manager):
-    msg = json.dumps({'path':path})
-    logger.info(f'broadcasting {msg}')
-    await manager.broadcast(msg)
-
-def create_db_element_helper(path: str, element, db: Session, manager, background_tasks):
+def create_db_element_helper(path: str, element, db: Session, background_tasks):
     element_dict = element.__dict__
     db_element = get_from_db_helper(path, element_dict, db)
     model_name = path.split("/")[-1]
     if db_element:
         raise HTTPException(status_code=400, detail=f'{model_name} already exists')
-    background_tasks.add_task(broadcast_path, path, manager=manager)
     return create_db_element_by_model(db, model_name, element_dict)
 
-def update_db_element_helper(path: str, element, db: Session, manager, background_tasks):
+def update_db_element_helper(path: str, element, db: Session, background_tasks):
     element_dict = {k:v for k,v in element.__dict__.items() if v is not None}
     keys = ['game_id', 'id']
     query_params = {k:element_dict[k] for k in keys}
@@ -52,7 +46,6 @@ def update_db_element_helper(path: str, element, db: Session, manager, backgroun
     model_name = path.split("/")[-1]
     if not db_element:
         raise HTTPException(status_code=400, detail=f'{model_name} does not exist to update')
-    background_tasks.add_task(broadcast_path, path, manager=manager)
     return update_db_element_by_model(db, model_name, query_params, db_update)
 
 def get_db_elements_by_model(db: Session, model_name:str, constraint_dict = {}, method = 'time_created'):

@@ -5,6 +5,7 @@ import { CREATE_GAME_ENDPOINT } from "../../api/Endpoints";
 import { GetRandomIds } from "../../storage/Register";
 
 export default function CreateGame() {
+    
     const gameText = GetRandomIds().randomGameId.id
     
     return <div>

@@ -10,5 +10,6 @@ export default function Inventory() {
         {myItems.map((item, i)=>{
             return <li key ={i}> {item.item_name} ({item.uses} uses remaining): {item.description} </li>
         })}
+        {myItems.length ==0? <h2>You have no items.</h2>:null }
     </div>
 }

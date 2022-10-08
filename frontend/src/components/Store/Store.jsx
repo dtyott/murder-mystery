@@ -1,12 +1,12 @@
 import React from 'react';
-import { GetActiveCharacter, GetActiveGame, GetRandomIds, GetWagers } from '../../storage/Register';
+import { GetActiveCharacter, GetActiveGame, GetRandomIds, GetWagers, TriggerFastDataRef } from '../../storage/Register';
 import { GetStores } from '../../storage/Register';
 import { getOutstandingWagerRisk } from '../Gambling/Utils';
 import { UpdateData, PostData } from '../../api/PostOffice';
 import { CREATE_ITEM_ENDPOINT, UPDATE_CHARACTER_ENDPOINT, UPDATE_STORE_ENDPOINT } from '../../api/Endpoints';
 import StoreLine from './StoreLine';
-
-
+import { useContext, useState, useEffect } from 'react';
+import { StoreContext } from '../../storage/Store';
 
 export default function Store() {
 
@@ -17,6 +17,7 @@ export default function Store() {
     const wagers = GetWagers()
     const wagerRisk = getOutstandingWagerRisk(wagers, active_char)
     const money = active_char.money
+    const [buys, setBuys] = useState(0)
     
     function handleBuy(store) {
         const store_data = {
@@ -42,11 +43,11 @@ export default function Store() {
         }
         UpdateData(UPDATE_STORE_ENDPOINT, store_data)
         UpdateData(UPDATE_CHARACTER_ENDPOINT, character_data)
-        PostData(CREATE_ITEM_ENDPOINT, item_data)
+        PostData(CREATE_ITEM_ENDPOINT, item_data)     
     }
 
     return <div>
-        <h1>For Sale</h1>
+        <h1>Store</h1>
         {stores.map((store,i)=>{
             const liquidity = money - wagerRisk
 

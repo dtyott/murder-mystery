@@ -24,7 +24,9 @@ export const UPDATE_WAGER_ENDPOINT = '/api/db/update/wagers';
 export const UPDATE_ITEM_ENDPOINT = '/api/db/update/items';
 export const UPDATE_STORE_ENDPOINT = '/api/db/update/stores';
 
-export const SOCKET_ADDRESS = 'ws://localhost:8000/websocket';
+export const POLL_SPEED_SLOW = 30000
+export const POLL_SPEED_FAST = 10000
+
 
 export const GAME_ENDPOINTS = [GAME_ENDPOINT, CREATE_GAME_ENDPOINT, UPDATE_GAME_ENDPOINT, RANDOM_GAME_ENDPOINT]
 export const CHARACTER_ENDPOINTS = [CHARACTER_ENDPOINT, CREATE_CHARACTER_ENDPOINT, UPDATE_CHARACTER_ENDPOINT, RANDOM_CHARACTER_ENDPOINT]

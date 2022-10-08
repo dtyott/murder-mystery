@@ -95,7 +95,7 @@ STORE_DEFAULTS = [
     'uses': 3},
     {'item_name': 'Armor',
     'description': "Blocks Damage From 2 Attacks",
-    'cost': 500,
+    'cost': 400,
     'quantity':8,
     'uses': 2},
     {'item_name': 'Truth Serum',

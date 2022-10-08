@@ -70,7 +70,7 @@ export default function Gambling() {
     }
 
     return <div>
-            <h1>New Gambling</h1>
+            <h1>Gambling</h1>
             {myWagers.map((w,i)=>{
                 return <WagerLine
                 key= {i}
