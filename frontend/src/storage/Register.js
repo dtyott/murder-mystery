@@ -64,3 +64,9 @@ export function GetStores() {
     const activeGameId = activeGame? activeGame.id: null
     return storesRaw.filter(w => w.game_id == activeGameId) || []
 }
+
+export function GetFastLoadTimeStamp() {
+    const storedData = useContext(StoreContext)
+    const updateFast = storedData.updateTimeFast
+    return updateFast
+}

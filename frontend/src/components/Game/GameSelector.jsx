@@ -9,7 +9,7 @@ export function GameSelector(props) {
       <NativeSelect
         value={props.gameId.game_id}
         onChange={(e)=>props.setGameId({game_id:e.target.value})}>
-          {props.gameIds.map((x, i)=>{
+          {props.gameIds.reverse().map((x, i)=>{
               return <option key={i} value={x.game_id}>{x.game_id}</option>
           })}
       </NativeSelect>

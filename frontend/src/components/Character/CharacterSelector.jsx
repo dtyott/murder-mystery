@@ -15,22 +15,10 @@ export function CharacterSelector(props) {
         autoComplete="off" 
         />
         </form>
-<h2> The </h2>
-        <form>
-        <TextField
-        label="Role"
-        color="secondary"
-        focused
-        value={props.roleText}
-        onChange={(e)=>props.setRoleText(e.target.value)}
-        placeholder="Fool"
-        autoComplete="off"
-        />
-        </form>
         <Button
         onClick = {(_)=>props.handleClick()}
         >
-        ROLL BACKSTORY
+        CREATE CHARACTER
           </Button>
         </div>
 }

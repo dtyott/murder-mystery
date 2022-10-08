@@ -3,6 +3,8 @@ import ColorizeIcon from '@mui/icons-material/Colorize';
 import FortIcon from '@mui/icons-material/Fort';
 import PinchIcon from '@mui/icons-material/Pinch';
 import ScienceIcon from '@mui/icons-material/Science';
+import { useContext } from "react";
+import { StoreContext } from "../../storage/Store";
 
 const icons = {
     'Pistol': PinchIcon,
@@ -17,6 +19,7 @@ const rot = {
 }
 
 export default function StoreLine(props) {
+    const storedData = useContext(StoreContext)
     const store = props.store
     const inStock = store.quantity > 0
     const canAfford = props.liquidity >= store.cost
@@ -28,7 +31,12 @@ export default function StoreLine(props) {
     <h2>{store.item_name}: ${store.cost} ({store.quantity} in stock)</h2>
     <li>{store.description} ({store.uses} uses)</li>
     <Icon style = {{transform: 'rotate('+rotate+'deg)' }}></Icon>
-    {<Button disabled = {!canBuy} onClick = {(e) => props.handleBuy(store)} variant="contained" color="success">
+    {<Button disabled = {!canBuy} onClick = {(e) => {
+        props.handleBuy(store)
+        storedData.fastTrigger()
+        
+    }
+        } variant="contained" color="success">
                 {inStock?(canAfford?"BUY": "INSUFFICIENT FUNDS"): "OUT OF STOCK"}
             </Button>}
     </div>
