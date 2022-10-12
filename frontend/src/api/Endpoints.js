@@ -25,7 +25,7 @@ export const UPDATE_ITEM_ENDPOINT = '/api/db/update/items';
 export const UPDATE_STORE_ENDPOINT = '/api/db/update/stores';
 
 export const POLL_SPEED_SLOW = 30000
-export const POLL_SPEED_FAST = 10000
+export const POLL_SPEED_FAST = 30000
 
 
 export const GAME_ENDPOINTS = [GAME_ENDPOINT, CREATE_GAME_ENDPOINT, UPDATE_GAME_ENDPOINT, RANDOM_GAME_ENDPOINT]

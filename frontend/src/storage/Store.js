@@ -1,4 +1,4 @@
-import {React, createContext, useEffect, useState} from 'react'
+import {React, createContext, useEffect, useState, useRef} from 'react'
 import { RANDOM_GAME_ENDPOINT, RANDOM_CHARACTER_ENDPOINT, RANDOM_WAGER_ENDPOINT, RANDOM_ITEM_ENDPOINT, RANDOM_STORE_ENDPOINT,
 GAME_ENDPOINT, CHARACTER_ENDPOINT, WAGER_ENDPOINT, ITEM_ENDPOINT, STORE_ENDPOINT, POLL_SPEED_SLOW, POLL_SPEED_FAST} from "../api/Endpoints";
 import { PostData, GetData } from '../api/PostOffice';
@@ -24,8 +24,9 @@ export default ({ children }) => {
     const [stores, setStores] = useState([])
     const [updateTimeFast, setUpdateTimeFast] = useState(null)
     const [updateTimeSlow, setUpdateTimeSlow] = useState(null)
+    const [connectionOpen, setConnectionOpen] = useState(false)
 
-
+    const ws = useRef();
 
     const contentsDict = {
         [GAME_ENDPOINT]: {},
@@ -65,13 +66,31 @@ export default ({ children }) => {
         refDataFast()
       }, []);
 
-    useInterval(()=>{
-        refDataSlow()
-    }, POLL_SPEED_SLOW)
-
-    useInterval(()=>{
-        refDataFast()
-    }, POLL_SPEED_FAST)
+    useEffect(() => {
+        ws.current = new WebSocket(process.env.WEBSOCKET_ADDRESS || "ws://localhost:9000");
+        console.log(ws.current)
+        // Opening the ws connection
+    
+        ws.current.onopen = () => {
+          console.log("Connection opened");
+          setConnectionOpen(true);
+        };
+    
+        // Listening on ws new added messages
+    
+        ws.current.onmessage = (event) => {
+          console.log(event.data)
+          refDataFast()
+          refDataSlow()
+          //const data = JSON.parse(event.data);
+          //console.log(data)
+        };
+    
+        return () => {
+          console.log("Cleaning up...");
+          ws.current.close();
+        };
+      }, []);
 
 
 
