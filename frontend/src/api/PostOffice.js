@@ -6,10 +6,10 @@ function SendREST(endpoint, options, setter, contents) {
     }
     //console.log(options)
     //console.log(endpoint)
-    const urlStart = process.env.REACT_APP_SERVER_URL == 'localhost:5000'? 'http://':'https://'
-    const serverUrl = urlStart+ process.env.REACT_APP_SERVER_URL
+    //const urlStart = process.env.REACT_APP_SERVER_URL == 'localhost:5000'? 'http://':'https://'
+    //const serverUrl = urlStart+ process.env.REACT_APP_SERVER_URL
     //console.log(serverUrl)
-    fetch(serverUrl+endpoint, options)
+    fetch(endpoint, options)
     .then(response=> {
         const json = response.json()
         return json
